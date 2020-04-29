@@ -14,7 +14,7 @@ module.exports = {
     newBlog.article = req.body.article;
     newBlog.save().then((blog) => {
       return res.json(blog);
-    });
+    }).catch(err => res.json({message: 'The author exists' }))
   },
   getBlogById: (req, res) => {
     Blog.findById({ _id: req.params.id }).then((blog) => {
@@ -27,8 +27,9 @@ module.exports = {
       blog.title = req.body.title ? req.body.title : blog.title;
       blog.subject = req.body.subject ? req.body.subject : blog.subject;
       blog.article = req.body.article ? req.body.article : blog.article;
-      blog.save().then((blog) => res.json(blog));
-    });
+      blog.save().then((blog) => res.json(blog))
+      .catch(err => res.json({message: 'The author already exists' }))
+    })
   },
   deleteBlog: (req, res) => {
     Blog.findByIdAndDelete({ _id: req.params.id }).then(
